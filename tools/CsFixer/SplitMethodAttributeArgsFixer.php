@@ -14,12 +14,12 @@ use PhpCsFixer\Fixer\WhitespacesAwareFixerInterface;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 
 /**
- * Met un argument par ligne sur les attributs de méthode ayant 2 arguments ou plus
- * (ex: #[RestRoute(path: ..., methods: ..., permission: ...)]).
+ * Puts one argument per line on method attributes with 2 arguments or more
+ * (e.g. #[RestRoute(path: ..., methods: ..., permission: ...)]).
  *
- * Portée volontairement limitée : un seul attribut par groupe #[...] avec des
- * arguments (pas de #[Foo(...), Bar(...)] groupés) ; les groupes déjà répartis sur
- * plusieurs lignes ne sont pas touchés (idempotent).
+ * Intentionally limited scope: a single attribute per #[...] group with
+ * arguments (not grouped #[Foo(...), Bar(...)]); groups already split across
+ * several lines are left untouched (idempotent).
  */
 final class SplitMethodAttributeArgsFixer extends AbstractFixer implements WhitespacesAwareFixerInterface
 {
@@ -28,7 +28,7 @@ final class SplitMethodAttributeArgsFixer extends AbstractFixer implements White
     public function getDefinition(): FixerDefinitionInterface
     {
         return new FixerDefinition(
-            'Met un argument par ligne sur les attributs de méthode ayant 2 arguments ou plus.',
+            'Puts one argument per line on method attributes with 2 arguments or more.',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
@@ -68,8 +68,8 @@ CODE_SAMPLE
             $index = $endIndex + 1;
         }
 
-        // Traité de droite à gauche : les insertions dans un groupe ne décalent que
-        // les index situés après lui, donc les groupes précédents (non traités) restent valides.
+        // Processed right to left: insertions within a group only shift indexes
+        // located after it, so previous (unprocessed) groups stay valid.
         foreach (array_reverse($groups) as [$startIndex, $endIndex]) {
             if (!$this->isMethodAttribute($tokens, $endIndex)) {
                 continue;
@@ -122,7 +122,7 @@ CODE_SAMPLE
             }
 
             // Comma at top level before any '(' => several bare attributes grouped
-            // together (#[Foo, Bar(...)]) : hors périmètre, on laisse tel quel.
+            // together (#[Foo, Bar(...)]): out of scope, left as-is.
             if (',' === $content) {
                 return;
             }
@@ -134,7 +134,7 @@ CODE_SAMPLE
 
         $closeParenIndex = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS, $openParenIndex);
 
-        // #[Foo(...), Bar(...)] : plusieurs attributs dans le même groupe, hors périmètre.
+        // #[Foo(...), Bar(...)]: several attributes in the same group, out of scope.
         $afterClose = $tokens->getNextMeaningfulToken($closeParenIndex);
         if (null !== $afterClose && $afterClose < $endIndex && $tokens[$afterClose]->equals(',')) {
             return;
@@ -154,7 +154,7 @@ CODE_SAMPLE
         $argIndent = $baseIndent . $this->whitespacesConfig->getIndent();
         $lineEnding = $this->whitespacesConfig->getLineEnding();
 
-        // Toujours droite à gauche, pour la même raison qu'au-dessus.
+        // Still right to left, for the same reason as above.
         $this->setWhitespaceBefore($tokens, $closeParenIndex, $lineEnding . $baseIndent);
 
         foreach (array_reverse($commaIndexes) as $commaIndex) {
@@ -175,9 +175,9 @@ CODE_SAMPLE
         for ($i = $openIndex + 1; $i < $closeIndex; $i++) {
             $content = $tokens[$i]->getContent();
 
-            // Comparaison sur le contenu brut, pas Token::equals() : php-cs-fixer
-            // réassigne un kind custom aux '['/']' de tableau littéral (CT::T_ARRAY_BRACKET_*),
-            // donc equals('[') ne les matche pas alors qu'ils délimitent bien un niveau.
+            // Comparing raw content, not Token::equals(): php-cs-fixer reassigns a
+            // custom kind to array literal '['/']' (CT::T_ARRAY_BRACKET_*), so
+            // equals('[') wouldn't match them even though they do delimit a level.
             if (\in_array($content, ['(', '[', '{'], true)) {
                 $depth++;
                 continue;

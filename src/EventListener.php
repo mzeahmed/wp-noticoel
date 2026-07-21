@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace WpNoticoel;
 
 /**
- * Écoute un ou plusieurs hooks WP déclenchés par n'importe quel thème ou plugin
- * du site et forwarde l'événement reçu à Noticoel. Un producteur (thème, plugin)
- * n'a besoin de rien connaître de Noticoel au-delà de la forme de l'Event — si ce
- * plugin est désactivé, `do_action(...)` reste un no-op.
+ * Listens for one or more WP hooks fired by any theme or plugin on the site
+ * and forwards the received event to Noticoel. A producer (theme, plugin)
+ * doesn't need to know anything about Noticoel beyond the Event shape — if
+ * this plugin is deactivated, `do_action(...)` stays a harmless no-op.
  *
- * Les hooks écoutés sont pris dans la constante NOTICOEL_EVENT_ACTIONS (tableau
- * de chaînes), à définir dans config/application.php (Bedrock) via
- * Config::define(), ou directement dans wp-config.php sinon. À défaut, seul
- * `noticoel/event` est écouté.
+ * The hooks listened to are read from the NOTICOEL_EVENT_ACTIONS constant
+ * (an array of strings), defined in config/application.php (Bedrock) via
+ * Config::define(), or directly in wp-config.php otherwise. Defaults to
+ * `noticoel/event` alone.
  */
 final readonly class EventListener
 {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace WpNoticoel;
 
 /**
- * Client HTTP vers l'API Noticoel (POST /api/v1/events/create).
+ * HTTP client for the Noticoel API (POST /api/v1/events/create).
  *
  * @see https://github.com/mzeahmed/noticoel — Event shape: source, category?, type, severity, title, message, metadata?
  */
@@ -47,7 +47,7 @@ final readonly class Client
         $status = (int) wp_remote_retrieve_response_code($response);
 
         if ($status < 200 || $status >= 300) {
-            error_log(sprintf('[wp-noticoel] Noticoel a répondu HTTP %d : %s', $status, wp_remote_retrieve_body($response)));
+            error_log(sprintf('[wp-noticoel] Noticoel responded with HTTP %d: %s', $status, wp_remote_retrieve_body($response)));
 
             return false;
         }

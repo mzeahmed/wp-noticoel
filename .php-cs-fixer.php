@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 /**
- * Config php-cs-fixer.
+ * php-cs-fixer config.
  *
- * Usage :
+ * Usage:
  *   vendor/bin/php-cs-fixer fix --dry-run --diff
  *   vendor/bin/php-cs-fixer fix
  */
@@ -27,7 +27,7 @@ return (new Config())
         new SplitMethodAttributeArgsFixer(),
     ])
     ->setRules([
-        // Preset "psr12" de Pint
+        // Pint's "psr12" preset
         '@PSR12' => true,
         'no_unused_imports' => true,
 
@@ -83,7 +83,7 @@ return (new Config())
             'format' => 'short',
         ],
 
-        // Règle custom : un argument par ligne sur les attributs de méthode 2+ args
+        // Custom rule: one argument per line on method attributes with 2+ args
         'WpNoticoel/split_method_attribute_args' => true,
     ])
     ->setRiskyAllowed(true)

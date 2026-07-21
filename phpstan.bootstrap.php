@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 /**
- * Fichier bootstrap pour PHPStan, pour preciser à PHPStan l'ordre d'inclusion des fichiers et éviter l'affichage des
- * erreurs qui n'en sont pas, comme les erreurs de type "Undefined constant 'ABSPATH'", ou autre.
+ * Bootstrap file for PHPStan, to tell it about the include order and avoid false positives
+ * such as "Undefined constant 'ABSPATH'" and similar errors.
  */
 
 if (!defined('PROJECT_ROOT')) {
