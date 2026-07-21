@@ -17,7 +17,27 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-require_once __DIR__ . '/vendor/autoload.php';
+define('NOTICOEL_PLUGIN_FILE', __FILE__);
+
+if (!defined('NOTICOEL_PLUGIN_PATH')) {
+    define('NOTICOEL_PLUGIN_PATH', dirname(NOTICOEL_PLUGIN_FILE));
+}
+
+if (!defined('NOTICOEL_PLUGIN_URL')) {
+    define('NOTICOEL_PLUGIN_URL', dirname(NOTICOEL_PLUGIN_FILE));
+}
+
+if (!defined('NOTICOEL_PLUGIN_BASENAME')) {
+    define('NOTICOEL_PLUGIN_BASENAME', dirname(NOTICOEL_PLUGIN_FILE));
+}
+
+$autoload = rtrim(NOTICOEL_PLUGIN_PATH) . '/vendor/autoload.php';
+
+if (file_exists($autoload)) {
+    require_once $autoload;
+} else {
+    wp_die(__('Composer autoloader not found.', 'wp-noticoel'));
+}
 
 function wpNoticoel(): void
 {
