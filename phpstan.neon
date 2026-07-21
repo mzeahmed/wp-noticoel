@@ -1,0 +1,23 @@
+includes:
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+parameters:
+    phpVersion: 80300
+    fileExtensions:
+        - php
+    level: 3
+
+    treatPhpDocTypesAsCertain: false
+
+    bootstrapFiles:
+        - phpstan.bootstrap.php
+
+    # Sur un runner CI aux coeurs nombreux mais peu de RAM, plusieurs workers en
+    # parallèle (chacun rechargeant le bootstrap WordPress + graphe de types) peut
+    # crasher pour OOM. On repasse en séquentiel pour ne jamais avoir qu'une seule
+    # empreinte mémoire à la fois, quelle que soit la RAM réelle du conteneur.
+    parallel:
+        maximumNumberOfProcesses: 1
+
+    paths:
+        - src
+    excludePaths:
